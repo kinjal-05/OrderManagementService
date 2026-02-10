@@ -15,19 +15,20 @@ public class CreateOrderRequest
 
 	public static class OrderItemRequest
 	{
-		@NotNull(message = "Product Id is required")
-		private Long id;
+		@NotNull(message = "Product ID is required")
+		private Long productId;
 
 		@NotNull(message = "Quantity is required")
 		@Min(value = 1,message = "Quantity must be atleast 1")
 		private Integer quantity;
 
-		public Long getId() {
-			return id;
+
+		public Long getProductId() {
+			return productId;
 		}
 
-		public void setId(Long id) {
-			this.id = id;
+		public void setProductId(Long productId) {
+			this.productId = productId;
 		}
 
 		public Integer getQuantity() {
@@ -38,8 +39,8 @@ public class CreateOrderRequest
 			this.quantity = quantity;
 		}
 
-		public OrderItemRequest(Long id, Integer quantity) {
-			this.id = id;
+		public OrderItemRequest(Long productId, Integer quantity) {
+			this.productId = productId;
 			this.quantity = quantity;
 		}
 
@@ -47,6 +48,18 @@ public class CreateOrderRequest
 		}
 	}
 
+	public List<OrderItemRequest> getItems() {
+		return items;
+	}
 
+	public void setItems(List<OrderItemRequest> items) {
+		this.items = items;
+	}
 
+	public CreateOrderRequest(List<OrderItemRequest> items) {
+		this.items = items;
+	}
+
+	public CreateOrderRequest() {
+	}
 }

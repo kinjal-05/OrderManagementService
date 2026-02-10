@@ -54,6 +54,17 @@ public class Order
 	@OrderBy("changedAt ASC")
 	private List<OrderStatusHistory> statusHistoryList;
 
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<OrderItem> items = new ArrayList<>();
+
+	public List<OrderItem> getItems() {
+		return items;
+	}
+
+	public void setItems(List<OrderItem> items) {
+		this.items = items;
+	}
+
 	@PrePersist
 	protected  void onCreate()
 	{
@@ -142,7 +153,7 @@ public class Order
 	public Order() {
 	}
 
-	public Order(Long id, Long userId, BigDecimal totalAmount, OrderStatus orderStatus, PaymentStatus paymentStatus, ShippingStatus shippingStatus, LocalDateTime createdAt, LocalDateTime updatedAt, List<OrderStatusHistory> statusHistoryList) {
+	public Order(Long id, Long userId, BigDecimal totalAmount, OrderStatus orderStatus, PaymentStatus paymentStatus, ShippingStatus shippingStatus, LocalDateTime createdAt, LocalDateTime updatedAt, List<OrderStatusHistory> statusHistoryList, List<OrderItem> items) {
 		this.id = id;
 		this.userId = userId;
 		this.totalAmount = totalAmount;
@@ -152,6 +163,7 @@ public class Order
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.statusHistoryList = statusHistoryList;
+		this.items = items;
 	}
 
 	@Override
@@ -166,6 +178,29 @@ public class Order
 				", createdAt=" + createdAt +
 				", updatedAt=" + updatedAt +
 				", statusHistoryList=" + statusHistoryList +
+				", items=" + items +
 				'}';
 	}
+
+//	public void addItem(OrderItem item) {
+//		items.add(item);
+//		item.setOrder(this);
+//	}
+//
+//	public void removeItem(OrderItem item) {
+//		items.remove(item);
+//		item.setOrder(null);
+//	}
+//
+//	public void addStatusHistory(OrderStatus status, String remarks) {
+//		OrderStatusHistory history = new OrderStatusHistory();
+//		history.setOrder(this);
+//		history.setOrderStatus(status);
+//		history.setRemarks(remarks);
+//
+//		statusHistoryList.add(history);
+//	}
+
+
+
 }
