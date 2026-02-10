@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="orders")
@@ -48,6 +50,10 @@ public class Order
 	@Column(name="updated_at")
 	private LocalDateTime updatedAt;
 
+	@OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
+	@OrderBy("changedAt ASC")
+	private List<OrderStatusHistory> statusHistoryList;
+
 	@PrePersist
 	protected  void onCreate()
 	{
@@ -59,6 +65,14 @@ public class Order
 	protected void onUpdate()
 	{
 		this.updatedAt=LocalDateTime.now();
+	}
+
+	public List<OrderStatusHistory> getStatusHistoryList() {
+		return statusHistoryList;
+	}
+
+	public void setStatusHistoryList(List<OrderStatusHistory> statusHistoryList) {
+		this.statusHistoryList = statusHistoryList;
 	}
 
 	public Long getId() {
@@ -125,7 +139,10 @@ public class Order
 		this.updatedAt = updatedAt;
 	}
 
-	public Order(Long id, Long userId, BigDecimal totalAmount, OrderStatus orderStatus, PaymentStatus paymentStatus, ShippingStatus shippingStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
+	public Order() {
+	}
+
+	public Order(Long id, Long userId, BigDecimal totalAmount, OrderStatus orderStatus, PaymentStatus paymentStatus, ShippingStatus shippingStatus, LocalDateTime createdAt, LocalDateTime updatedAt, List<OrderStatusHistory> statusHistoryList) {
 		this.id = id;
 		this.userId = userId;
 		this.totalAmount = totalAmount;
@@ -134,9 +151,7 @@ public class Order
 		this.shippingStatus = shippingStatus;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-	}
-
-	public Order() {
+		this.statusHistoryList = statusHistoryList;
 	}
 
 	@Override
@@ -150,6 +165,7 @@ public class Order
 				", shippingStatus=" + shippingStatus +
 				", createdAt=" + createdAt +
 				", updatedAt=" + updatedAt +
+				", statusHistoryList=" + statusHistoryList +
 				'}';
 	}
 }
